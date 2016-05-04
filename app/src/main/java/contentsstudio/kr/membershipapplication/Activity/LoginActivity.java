@@ -53,7 +53,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    public void loadItem() {
+    // Retrofit
+    public void login() {
         String string_user_id = mIdEditText.getText().toString();
 
         Retrofit retrofit = new Retrofit.Builder()
