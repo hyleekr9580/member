@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import contentsstudio.kr.membershipapplication.DBinterface.Dbwhere;
-import contentsstudio.kr.membershipapplication.Models.MemberModel;
+import contentsstudio.kr.membershipapplication.DBinterface.Result;
 import contentsstudio.kr.membershipapplication.R;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // Retrofit
     public void login() {
         String string_user_id = mIdEditText.getText().toString();
+        String string_user_pw = mPwEditText.getText().toString();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://suwonsmartapp.iptime.org/")
@@ -63,15 +64,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .build();
         mDbwhere = retrofit.create(Dbwhere.class);
 
-        Call<MemberModel> memberModelCall = mDbwhere.WhereServer(string_user_id);
-        memberModelCall.enqueue(new Callback<MemberModel>() {
+        Call<Result> memberModelCall = mDbwhere.WhereServer(string_user_id, string_user_pw);
+        memberModelCall.enqueue(new Callback<Result>() {
             @Override
-            public void onResponse(Call<MemberModel> call, Response<MemberModel> response) {
+            public void onResponse(Call<Result> call, Response<Result> response) {
+                Toast.makeText(LoginActivity.this, response.body().getResult(), Toast.LENGTH_SHORT).show();
+
+                if (response.body().getResult().equals("OK")) {
+                    Intent intent = new Intent(LoginActivity.this, LoginSuccessActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(LoginActivity.this, "로그인되었습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LoginActivity.this, "값 없음", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<MemberModel> call, Throwable t) {
-
+            public void onFailure(Call<Result> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "통신 에러", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -97,11 +107,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     } else if (TextUtils.isEmpty(mPwEditText.getText())) {
                         setAlertMsg("PW를 입력하세요.");
                     } else {
-
-
-                        Intent intent = new Intent(LoginActivity.this, LoginSuccessActivity.class);
-                        startActivity(intent);
-                        Toast.makeText(LoginActivity.this, "로그인되었습니다.", Toast.LENGTH_SHORT).show();
+                        login();
                     }
                 }
                 break;

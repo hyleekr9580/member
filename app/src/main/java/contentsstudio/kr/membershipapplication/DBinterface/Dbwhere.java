@@ -1,9 +1,8 @@
 package contentsstudio.kr.membershipapplication.DBinterface;
 
-import contentsstudio.kr.membershipapplication.Models.MemberModel;
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by hoyoung on 2016-05-03.
@@ -11,7 +10,8 @@ import retrofit2.http.Path;
  */
 public interface Dbwhere {
     @GET("test/lhy/member_login.php")
-    Call<MemberModel> WhereServer(@Path("user_id") String user_id);
+    Call<Result> WhereServer(@Query("user_id") String user_id,
+                             @Query("user_pw") String user_pw);
 
 
 }
