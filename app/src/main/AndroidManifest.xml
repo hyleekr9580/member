@@ -21,7 +21,8 @@
         </activity>
         <activity android:name=".Activity.MemberInsertActivity" />
         <activity android:name=".Activity.LoginSuccessActivity" />
-        <activity android:name=".Activity.AdminActivity"></activity>
+        <activity android:name=".Activity.AdminActivity" />
+        <activity android:name=".Activity.MemberUpdateActivity"></activity>
     </application>
 
 </manifest>

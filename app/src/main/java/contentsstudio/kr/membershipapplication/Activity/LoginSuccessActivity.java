@@ -1,5 +1,6 @@
 package contentsstudio.kr.membershipapplication.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -25,6 +26,10 @@ public class LoginSuccessActivity extends AppCompatActivity implements View.OnCl
         switch (v.getId()) {
             case R.id.logout:
                 finish();
+                break;
+            case R.id.update:
+                Intent intent = new Intent(LoginSuccessActivity.this, MemberUpdateActivity.class);
+                startActivity(intent);
                 break;
         }
     }

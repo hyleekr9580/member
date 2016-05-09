@@ -70,12 +70,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onResponse(Call<Result> call, Response<Result> response) {
                 Toast.makeText(LoginActivity.this, response.body().getResult(), Toast.LENGTH_SHORT).show();
 
-                if (response.body().getResult().equals("OK")) {
+                if (response.body().getResult().equals("로그인 되었습니다. 감사합니다.")) {
                     Intent intent = new Intent(LoginActivity.this, LoginSuccessActivity.class);
                     startActivity(intent);
-                    Toast.makeText(LoginActivity.this, "로그인되었습니다.", Toast.LENGTH_SHORT).show();
+
+//                    Toast.makeText(LoginActivity.this, "로그인되었습니다.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(LoginActivity.this, "값 없음", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(LoginActivity.this, "ID/PW가 일치 하지 않습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
 
