@@ -10,22 +10,21 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="contentsstudio.kr.membershipapplication.Activity.MemberUpdateActivity">
 
-
     <EditText
-        android:id="@+id/user_name"
+        android:id="@+id/update_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="이름을 입력하세요." />
 
     <EditText
-        android:id="@+id/user_email"
+        android:id="@+id/update_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="이메일을 입력하세요."
         android:inputType="textEmailAddress" />
 
     <Button
-        android:id="@+id/member_btn"
+        android:id="@+id/update_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="수정하기" />

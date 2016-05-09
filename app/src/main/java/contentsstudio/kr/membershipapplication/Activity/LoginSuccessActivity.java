@@ -11,6 +11,7 @@ import contentsstudio.kr.membershipapplication.R;
 public class LoginSuccessActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button mBtnLogOut;
+    private Button mBtnUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +20,8 @@ public class LoginSuccessActivity extends AppCompatActivity implements View.OnCl
 
         mBtnLogOut = (Button) findViewById(R.id.logout);
         mBtnLogOut.setOnClickListener(this);
+        mBtnUpdate = (Button) findViewById(R.id.update);
+        mBtnUpdate.setOnClickListener(this);
     }
 
     @Override

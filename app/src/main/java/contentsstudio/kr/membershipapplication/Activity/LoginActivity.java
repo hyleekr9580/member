@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import contentsstudio.kr.membershipapplication.DBinterface.Dbwhere;
+import contentsstudio.kr.membershipapplication.DBinterface.DbWhere;
 import contentsstudio.kr.membershipapplication.DBinterface.Result;
 import contentsstudio.kr.membershipapplication.R;
 import retrofit2.Call;
@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText mIdEditText;
     private EditText mPwEditText;
     private Button mAdmin;
-    private Dbwhere mDbwhere;
+    private DbWhere mDbWhere;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +62,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .baseUrl("http://suwonsmartapp.iptime.org/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        mDbwhere = retrofit.create(Dbwhere.class);
+        mDbWhere = retrofit.create(DbWhere.class);
 
-        Call<Result> memberModelCall = mDbwhere.WhereServer(string_user_id, string_user_pw);
+        Call<Result> memberModelCall = mDbWhere.WhereServer(string_user_id, string_user_pw);
         memberModelCall.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
@@ -73,7 +73,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (response.body().getResult().equals("로그인 되었습니다. 감사합니다.")) {
                     Intent intent = new Intent(LoginActivity.this, LoginSuccessActivity.class);
                     startActivity(intent);
-
 //                    Toast.makeText(LoginActivity.this, "로그인되었습니다.", Toast.LENGTH_SHORT).show();
                 } else {
 //                    Toast.makeText(LoginActivity.this, "ID/PW가 일치 하지 않습니다.", Toast.LENGTH_SHORT).show();
