@@ -28,7 +28,6 @@ public class LoginSuccessActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.logout:
-                finish();
                 break;
             case R.id.update:
                 Intent intent = new Intent(LoginSuccessActivity.this, MemberUpdateActivity.class);
@@ -36,4 +35,5 @@ public class LoginSuccessActivity extends AppCompatActivity implements View.OnCl
                 break;
         }
     }
+
 }

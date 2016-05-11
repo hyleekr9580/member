@@ -3,11 +3,13 @@ package contentsstudio.kr.membershipapplication.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +35,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText mPwEditText;
     private Button mAdmin;
     private DbWhere mDbWhere;
+    private String string_user_id;
+    private String string_user_pw;
+    private String PreferencesString;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +57,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mAdmin.setOnClickListener(this);
 
 
+
     }
 
     // Retrofit
     public void login() {
-        String string_user_id = mIdEditText.getText().toString();
-        String string_user_pw = mPwEditText.getText().toString();
+        string_user_id = mIdEditText.getText().toString();
+        string_user_pw = mPwEditText.getText().toString();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://suwonsmartapp.iptime.org/")
@@ -68,20 +75,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         memberModelCall.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
-                Toast.makeText(LoginActivity.this, response.body().getResult(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LoginActivity.this, response.body().getResult(), Toast.LENGTH_SHORT).show();
 
-                if (response.body().getResult().equals("로그인 되었습니다. 감사합니다.")) {
+                if (response.body().getResult().equals("ok")) {
+
+                    savePreferences();
+                    Log.e(TAG, "savePreferences: 로그인 확인");
+
+                    getPreferences();
+                    Log.e(TAG, "getPreferences: ID값 확인");
+                    Toast.makeText(LoginActivity.this, "로그인되었습니다.", Toast.LENGTH_SHORT).show();
+
                     Intent intent = new Intent(LoginActivity.this, LoginSuccessActivity.class);
                     startActivity(intent);
-//                    Toast.makeText(LoginActivity.this, "로그인되었습니다.", Toast.LENGTH_SHORT).show();
                 } else {
-//                    Toast.makeText(LoginActivity.this, "ID/PW가 일치 하지 않습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "ID/PW가 일치 하지 않습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Result> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "통신 에러", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "통신 에러가 발생 하였습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -90,9 +104,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //  Click
     @Override
     public void onClick(View v) {
-        String user_id = mIdEditText.getText().toString();
-
-
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
         switch (v.getId()) {
@@ -183,5 +194,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return true;
     }
 
+
+    private void savePreferences(){
+        SharedPreferences pref = getSharedPreferences("membershipapplication", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("ID",string_user_id);
+        editor.commit();
+    }
+
+    // 값 불러오기
+    private void getPreferences() {
+        SharedPreferences pref = getSharedPreferences("membershipapplication", MODE_PRIVATE);
+        PreferencesString = pref.getString("ID", String.valueOf(MODE_PRIVATE));
+        Log.e(TAG, "getPreferences: "+string_user_id );
+    }
 
 }
