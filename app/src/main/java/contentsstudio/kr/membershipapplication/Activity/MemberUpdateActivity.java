@@ -3,6 +3,7 @@ package contentsstudio.kr.membershipapplication.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,14 +28,10 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
     private Button mBtnUpdate;
     private DbUpdate mDbUpdate;
     private TextView mTextId;
-    private String mResult;
     private String PreferencesString;
-    private TextView mTextName;
-    private TextView mTextEmail;
     private String string_user_id;
     private String string_user_name;
     private String string_user_email;
-    private String reName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,13 +86,18 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
 
     }
 
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.update_btn:
-                update();
+                if (TextUtils.isEmpty(mEdtName.getText())) {
+                    Toast.makeText(MemberUpdateActivity.this, "수정할 이름을 입력하세요.", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(mEdtEmail.getText())) {
 
+                    Toast.makeText(MemberUpdateActivity.this, "수정할 이메일을 입력하세요.", Toast.LENGTH_SHORT).show();
+                } else {
+                    update();
+
+                }
         }
     }
 
