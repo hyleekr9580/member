@@ -11,8 +11,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
+import contentsstudio.kr.membershipapplication.DBinterface.DbSelect;
 import contentsstudio.kr.membershipapplication.DBinterface.DbUpdate;
 import contentsstudio.kr.membershipapplication.DBinterface.Result;
+import contentsstudio.kr.membershipapplication.Models.MemberModel;
 import contentsstudio.kr.membershipapplication.R;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,6 +36,7 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
     private String string_user_id;
     private String string_user_name;
     private String string_user_email;
+    private DbSelect mDbSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,28 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
         mBtnUpdate = (Button) findViewById(R.id.update_btn);
         mBtnUpdate.setOnClickListener(this);
 
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://suwonsmartapp.iptime.org/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        mDbSelect = retrofit.create(DbSelect.class);
+
+        Call<List<MemberModel>> call = mDbSelect.selectServer(PreferencesString);
+        call.enqueue(new Callback<List<MemberModel>>() {
+            @Override
+            public void onResponse(Call<List<MemberModel>> call, Response<List<MemberModel>> response) {
+                MemberModel member = response.body().get(0);
+                mEdtName.setText(member.getUser_name());
+                mEdtEmail.setText(member.getUser_email());
+            }
+
+            @Override
+            public void onFailure(Call<List<MemberModel>> call, Throwable t) {
+                Toast.makeText(MemberUpdateActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
+            }
+        });
     }
 
     // Retrofit
