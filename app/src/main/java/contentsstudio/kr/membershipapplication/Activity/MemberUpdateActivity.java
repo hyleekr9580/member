@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import contentsstudio.kr.membershipapplication.DBinterface.DbSelect;
 import contentsstudio.kr.membershipapplication.DBinterface.DbUpdate;
@@ -45,6 +47,7 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
 
 
         getPreferences();
+        select();
         mTextId = (TextView) findViewById(R.id.server_id);
         mTextId.setText("현재 로그인 ID : " + PreferencesString);
 
@@ -56,6 +59,10 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
         mBtnUpdate.setOnClickListener(this);
 
 
+    }
+
+    //  Retrofit select
+    public void select() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://suwonsmartapp.iptime.org/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -79,7 +86,7 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
         });
     }
 
-    // Retrofit
+    // Retrofit update
     public void update() {
         string_user_id = PreferencesString;
         string_user_name = mEdtName.getText().toString();
@@ -119,11 +126,11 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
                 if (TextUtils.isEmpty(mEdtName.getText())) {
                     Toast.makeText(MemberUpdateActivity.this, "수정할 이름을 입력하세요.", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(mEdtEmail.getText())) {
-
                     Toast.makeText(MemberUpdateActivity.this, "수정할 이메일을 입력하세요.", Toast.LENGTH_SHORT).show();
+                } else if (!checkEmail(mEdtEmail.getText().toString())) {
+                    Toast.makeText(MemberUpdateActivity.this, "정상적인 이메일 형식으로 입력하세요.", Toast.LENGTH_SHORT).show();
                 } else {
                     update();
-
                 }
         }
     }
@@ -136,4 +143,11 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
 
     }
 
+    //  이메일 형식 체크하기
+    private boolean checkEmail(String email) {
+        String mail = "^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
+        Pattern p = Pattern.compile(mail);
+        Matcher m = p.matcher(email);
+        return m.matches();
+    }
 }
