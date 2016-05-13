@@ -83,8 +83,8 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
 
         mButtonNew = (Button) findViewById(R.id.member_btn);
         mButtonNew.setOnClickListener(this);
-        mButtonChk = (Button) findViewById(R.id.user_idchk);
-        mButtonChk.setOnClickListener(this);
+//        mButtonChk = (Button) findViewById(R.id.user_idchk);
+//        mButtonChk.setOnClickListener(this);
 
         mTextChk01 = (TextView) findViewById(R.id.chk01_text);
         mTextChk01.setOnClickListener(this);
@@ -155,9 +155,9 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
                 startActivity(mIntent);
                 break;
             //  아이디체크
-            case R.id.user_idchk:
-
-                break;
+//            case R.id.user_idchk:
+//
+//                break;
             //  회원가입 서버 저장
             case R.id.member_btn:
                 if (chkUserData()) {

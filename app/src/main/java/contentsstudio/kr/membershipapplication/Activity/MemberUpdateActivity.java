@@ -135,7 +135,7 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    // 값 불러오기
+    // 저장 값 불러오기
     private void getPreferences() {
         SharedPreferences pref = getSharedPreferences("membershipapplication", MODE_PRIVATE);
         PreferencesString = pref.getString("ID", "");

@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import contentsstudio.kr.membershipapplication.BroaddCast.BroadcastActivity;
 import contentsstudio.kr.membershipapplication.DBinterface.DbWhere;
 import contentsstudio.kr.membershipapplication.DBinterface.Result;
 import contentsstudio.kr.membershipapplication.R;
@@ -86,7 +87,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Log.e(TAG, "getPreferences: ID값 확인");
                     Toast.makeText(LoginActivity.this, "로그인되었습니다.", Toast.LENGTH_SHORT).show();
 
-                    Intent intent = new Intent(LoginActivity.this, LoginSuccessActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, BroadcastActivity.class);
                     startActivity(intent);
                 } else {
                     Toast.makeText(LoginActivity.this, "ID/PW가 일치 하지 않습니다.", Toast.LENGTH_SHORT).show();

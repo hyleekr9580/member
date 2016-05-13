@@ -1,10 +1,12 @@
 package contentsstudio.kr.membershipapplication.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import contentsstudio.kr.membershipapplication.R;
 
@@ -28,6 +30,13 @@ public class LoginSuccessActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.logout:
+                // 로그아웃 시키기
+                SharedPreferences preferences = getSharedPreferences("membershipapplication", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.commit();
+                Toast.makeText(LoginSuccessActivity.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+                finish();
                 break;
             case R.id.update:
                 Intent intent = new Intent(LoginSuccessActivity.this, MemberUpdateActivity.class);
