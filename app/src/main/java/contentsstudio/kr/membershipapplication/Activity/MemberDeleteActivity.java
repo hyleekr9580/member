@@ -38,6 +38,7 @@ public class MemberDeleteActivity extends AppCompatActivity implements View.OnCl
     private String PreferencesString;
     private DbInterface mDbDelete;
     private DbSelect mDbSelect;
+    private String string_user_del;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +63,41 @@ public class MemberDeleteActivity extends AppCompatActivity implements View.OnCl
 
     }
 
-    // Retrofit delete
+    // Retrofit delete 방식
+//    public void delete() {
+//        string_user_id = PreferencesString;
+//
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("http://suwonsmartapp.iptime.org/")
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//        mDbDelete = retrofit.create(DbInterface.class);
+//
+//        Call<Result> memberModelCall = mDbDelete.DeleteServer(string_user_id);
+//        memberModelCall.enqueue(new Callback<Result>() {
+//            @Override
+//            public void onResponse(Call<Result> call, Response<Result> response) {
+////                Toast.makeText(MemberUpdateActivity.this, response.body().getResult(), Toast.LENGTH_SHORT).show();
+//                if (response.body().getResult().equals("ok")) {
+//                    Toast.makeText(MemberDeleteActivity.this, "탈퇴가 완료 되었습니다.", Toast.LENGTH_SHORT).show();
+//
+//                } else {
+//                    Toast.makeText(MemberDeleteActivity.this, "정상적으로 탈퇴가 되지 않았습니다.", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Result> call, Throwable t) {
+//                Toast.makeText(MemberDeleteActivity.this, "통신 에러", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//    }
+
+    // Retrofit delete Y / N 방식
     public void delete() {
         string_user_id = PreferencesString;
+        string_user_del = "Y";
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://suwonsmartapp.iptime.org/")
@@ -72,7 +105,7 @@ public class MemberDeleteActivity extends AppCompatActivity implements View.OnCl
                 .build();
         mDbDelete = retrofit.create(DbInterface.class);
 
-        Call<Result> memberModelCall = mDbDelete.DeleteServer(string_user_id);
+        Call<Result> memberModelCall = mDbDelete.DeleteServer(string_user_id,string_user_del);
         memberModelCall.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
@@ -92,6 +125,8 @@ public class MemberDeleteActivity extends AppCompatActivity implements View.OnCl
         });
 
     }
+
+
 
     //  Retrofit select
     public void select() {

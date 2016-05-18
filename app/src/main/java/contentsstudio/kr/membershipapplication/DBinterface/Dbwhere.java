@@ -11,7 +11,8 @@ import retrofit2.http.Query;
 public interface DbWhere {
     @GET("test/lhy/member_login.php")
     Call<Result> WhereServer(@Query("user_id") String user_id,
-                             @Query("user_pw") String user_pw);
+                             @Query("user_pw") String user_pw,
+                             @Query("user_del") String user_del);
 
 
 }

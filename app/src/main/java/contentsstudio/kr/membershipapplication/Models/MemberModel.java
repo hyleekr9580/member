@@ -16,6 +16,8 @@ public class MemberModel {
     private String user_account;
     private String user_email;
     private String user_adid;
+    private String user_del;
+    private String user_update_date;
     private String user_date;
 
 
@@ -107,6 +109,22 @@ public class MemberModel {
         this.user_date = user_date;
     }
 
+    public String getUser_del() {
+        return user_del;
+    }
+
+    public void setUser_del(String user_del) {
+        this.user_del = user_del;
+    }
+
+    public String getUser_update_date() {
+        return user_update_date;
+    }
+
+    public void setUser_update_date(String user_update_date) {
+        this.user_update_date = user_update_date;
+    }
+
     @Override
     public String toString() {
         return "MemberModel{" +
@@ -120,6 +138,8 @@ public class MemberModel {
                 ", user_account='" + user_account + '\'' +
                 ", user_email='" + user_email + '\'' +
                 ", user_adid='" + user_adid + '\'' +
+                ", user_del='" + user_del + '\'' +
+                ", user_update_date='" + user_update_date + '\'' +
                 ", user_date='" + user_date + '\'' +
                 '}';
     }

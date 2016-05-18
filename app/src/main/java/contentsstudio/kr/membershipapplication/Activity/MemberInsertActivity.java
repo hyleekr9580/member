@@ -27,6 +27,8 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import contentsstudio.kr.membershipapplication.DBinterface.DbInsert;
 import contentsstudio.kr.membershipapplication.DBinterface.Result;
@@ -250,10 +252,21 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
             mToast.setText("입력하신 비빌번호가 다릅니다.\n비밀번호를 확인하세요.");
             mToast.show();
             return false;
+        } else if (!checkEmail(mEditEmail.getText().toString())) {
+            mToast.setText("정상적인 EMAIL 형식으로 작성해 주세요");
+            mToast.show();
+            return false;
         }
         return true;
     }
 
+    //  이메일 형식 체크하기
+    private boolean checkEmail(String email) {
+        String mail = "^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
+        Pattern p = Pattern.compile(mail);
+        Matcher m = p.matcher(email);
+        return m.matches();
+    }
 
 }
 

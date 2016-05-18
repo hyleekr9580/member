@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import contentsstudio.kr.membershipapplication.BroaddCast.BroadcastActivity;
+import contentsstudio.kr.membershipapplication.DBinterface.DbSelect;
 import contentsstudio.kr.membershipapplication.DBinterface.DbWhere;
 import contentsstudio.kr.membershipapplication.DBinterface.Result;
 import contentsstudio.kr.membershipapplication.R;
@@ -39,6 +40,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private String string_user_id;
     private String string_user_pw;
     private String PreferencesString;
+    private String string_user_del;
+    private DbSelect mDbSelect;
 
 
     @Override
@@ -58,7 +61,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mAdmin.setOnClickListener(this);
 
 
-
     }
 
     // Retrofit
@@ -72,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .build();
         mDbWhere = retrofit.create(DbWhere.class);
 
-        Call<Result> memberModelCall = mDbWhere.WhereServer(string_user_id, string_user_pw);
+        Call<Result> memberModelCall = mDbWhere.WhereServer(string_user_id, string_user_pw, string_user_del);
         memberModelCall.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
@@ -85,6 +87,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     getPreferences();
                     Log.e(TAG, "getPreferences: ID값 확인");
+
+
                     Toast.makeText(LoginActivity.this, "로그인되었습니다.", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(LoginActivity.this, BroadcastActivity.class);
@@ -196,10 +200,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void savePreferences(){
+    //  값 저장하기
+    private void savePreferences() {
         SharedPreferences pref = getSharedPreferences("membershipapplication", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString("ID",string_user_id);
+        editor.putString("ID", string_user_id);
         editor.commit();
     }
 
@@ -207,7 +212,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void getPreferences() {
         SharedPreferences pref = getSharedPreferences("membershipapplication", MODE_PRIVATE);
         PreferencesString = pref.getString("ID", String.valueOf(MODE_PRIVATE));
-        Log.e(TAG, "getPreferences: "+string_user_id );
+        Log.e(TAG, "getPreferences: " + string_user_id);
     }
 
 }
