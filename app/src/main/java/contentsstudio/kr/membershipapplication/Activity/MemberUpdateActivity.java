@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +40,7 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
     private String string_user_name;
     private String string_user_email;
     private DbSelect mDbSelect;
+    private String mDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,8 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
 
     //  Retrofit select
     public void select() {
+
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://suwonsmartapp.iptime.org/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -73,9 +77,14 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
         call.enqueue(new Callback<List<MemberModel>>() {
             @Override
             public void onResponse(Call<List<MemberModel>> call, Response<List<MemberModel>> response) {
+
+
                 MemberModel member = response.body().get(0);
                 mEdtName.setText(member.getUser_name());
                 mEdtEmail.setText(member.getUser_email());
+
+
+
             }
 
             @Override
@@ -88,6 +97,11 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
 
     // Retrofit update
     public void update() {
+        //  update 날짜 확인 (최종 업데이트 일자)
+        long today = System.currentTimeMillis(); // long 형의 현재시간
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        mDate = simpleDateFormat.format(today);
+
         string_user_id = PreferencesString;
         string_user_name = mEdtName.getText().toString();
         string_user_email = mEdtEmail.getText().toString();
@@ -98,7 +112,7 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
                 .build();
         mDbUpdate = retrofit.create(DbUpdate.class);
 
-        Call<Result> memberModelCall = mDbUpdate.UpdateServer(string_user_name, string_user_email, string_user_id);
+        Call<Result> memberModelCall = mDbUpdate.UpdateServer(string_user_name, string_user_email, string_user_id,mDate);
         memberModelCall.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {

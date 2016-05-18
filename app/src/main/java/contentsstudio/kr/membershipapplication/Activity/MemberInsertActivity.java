@@ -146,12 +146,12 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
         switch (v.getId()) {
             //  이용약관 확인
             case R.id.chk01_text:
-                mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.dhcomms.com/applications/ca/cpa/google/main_agreepage01.html"));
+                mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.dhcomms.com"));
                 startActivity(mIntent);
                 break;
             //  개인정보취급방침 확인
             case R.id.chk02_text:
-                mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.dhcomms.com/applications/ca/cpa/google/main_agreepage02.html"));
+                mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.dhcomms.com"));
                 startActivity(mIntent);
                 break;
             //  아이디체크
