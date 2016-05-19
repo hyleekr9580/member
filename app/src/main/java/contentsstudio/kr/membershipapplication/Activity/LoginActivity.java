@@ -26,7 +26,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import contentsstudio.kr.membershipapplication.BroaddCast.BroadcastActivity;
-import contentsstudio.kr.membershipapplication.DBinterface.DbWhere;
+import contentsstudio.kr.membershipapplication.DBinterface.DbInterface;
 import contentsstudio.kr.membershipapplication.DBinterface.Result;
 import contentsstudio.kr.membershipapplication.R;
 import contentsstudio.kr.membershipapplication.Util.AES256Util;
@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText mIdEditText;
     private EditText mPwEditText;
     private Button mAdmin;
-    private DbWhere mDbWhere;
+    private DbInterface mDbWhere;
     private String string_user_id;
     private String string_user_pw;
     private String PreferencesString;
@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .baseUrl("http://suwonsmartapp.iptime.org/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        mDbWhere = retrofit.create(DbWhere.class);
+        mDbWhere = retrofit.create(DbInterface.class);
 
         Call<Result> memberModelCall = mDbWhere.WhereServer(string_user_id, mEecText, string_user_del);
         memberModelCall.enqueue(new Callback<Result>() {

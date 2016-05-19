@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import contentsstudio.kr.membershipapplication.DBinterface.DbSelect;
-import contentsstudio.kr.membershipapplication.DBinterface.DbUpdate;
+import contentsstudio.kr.membershipapplication.DBinterface.DbInterface;
 import contentsstudio.kr.membershipapplication.DBinterface.Result;
 import contentsstudio.kr.membershipapplication.Models.MemberModel;
 import contentsstudio.kr.membershipapplication.R;
@@ -33,13 +32,13 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
     private EditText mEdtName;
     private EditText mEdtEmail;
     private Button mBtnUpdate;
-    private DbUpdate mDbUpdate;
+    private DbInterface mDbUpdate;
     private TextView mTextId;
     private String PreferencesString;
     private String string_user_id;
     private String string_user_name;
     private String string_user_email;
-    private DbSelect mDbSelect;
+    private DbInterface mDbSelect;
     private String mDate;
 
     @Override
@@ -71,7 +70,7 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
                 .baseUrl("http://suwonsmartapp.iptime.org/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        mDbSelect = retrofit.create(DbSelect.class);
+        mDbSelect = retrofit.create(DbInterface.class);
 
         Call<List<MemberModel>> call = mDbSelect.selectServer(PreferencesString);
         call.enqueue(new Callback<List<MemberModel>>() {
@@ -110,7 +109,7 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
                 .baseUrl("http://suwonsmartapp.iptime.org/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        mDbUpdate = retrofit.create(DbUpdate.class);
+        mDbUpdate = retrofit.create(DbInterface.class);
 
         Call<Result> memberModelCall = mDbUpdate.UpdateServer(string_user_name, string_user_email, string_user_id,mDate);
         memberModelCall.enqueue(new Callback<Result>() {

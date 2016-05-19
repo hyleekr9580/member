@@ -37,7 +37,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import contentsstudio.kr.membershipapplication.DBinterface.DbInsert;
+import contentsstudio.kr.membershipapplication.DBinterface.DbInterface;
 import contentsstudio.kr.membershipapplication.DBinterface.Result;
 import contentsstudio.kr.membershipapplication.R;
 import contentsstudio.kr.membershipapplication.Util.AES256Util;
@@ -59,7 +59,7 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
     private EditText mEditEmail;
 
     private Button mButtonNew;
-    private DbInsert mDbInsert;
+    private DbInterface mDbInsert;
 
     private String google_id = "";
     private String mPhone;
@@ -74,6 +74,7 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
     private Intent mIntent;
     private AES256Util mAes256;
     private String mEncText;
+    private Button mButtonChk;
 
 
     @Override
@@ -100,8 +101,8 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
 
         mButtonNew = (Button) findViewById(R.id.member_btn);
         mButtonNew.setOnClickListener(this);
-//        mButtonChk = (Button) findViewById(R.id.user_idchk);
-//        mButtonChk.setOnClickListener(this);
+        mButtonChk = (Button) findViewById(R.id.user_idchk);
+        mButtonChk.setOnClickListener(this);
 
         mTextChk01 = (TextView) findViewById(R.id.chk01_text);
         mTextChk01.setOnClickListener(this);
@@ -115,7 +116,7 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
                 .baseUrl("http://suwonsmartapp.iptime.org/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        mDbInsert = retrofit.create(DbInsert.class);
+        mDbInsert = retrofit.create(DbInterface.class);
 
         // 구글 ADID를 가지고 위한 AdidAsyncTask
         new AdidAsyncTask().execute();
@@ -192,9 +193,9 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
                 startActivity(mIntent);
                 break;
             //  아이디체크
-//            case R.id.user_idchk:
-//
-//                break;
+            case R.id.user_idchk:
+                Toast.makeText(MemberInsertActivity.this, "아이디 중복 체크", Toast.LENGTH_SHORT).show();
+                break;
             //  회원가입 서버 저장
             case R.id.member_btn:
                 if (chkUserData()) {

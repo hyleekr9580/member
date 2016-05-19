@@ -1,7 +1,7 @@
 package contentsstudio.kr.membershipapplication.Activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import contentsstudio.kr.membershipapplication.DBinterface.DbSelect;
+import contentsstudio.kr.membershipapplication.DBinterface.DbInterface;
 import contentsstudio.kr.membershipapplication.Models.MemberModel;
 import contentsstudio.kr.membershipapplication.R;
 import retrofit2.Call;
@@ -39,7 +39,7 @@ public class AdminActivity extends AppCompatActivity implements Callback<List<Me
                 .baseUrl("http://suwonsmartapp.iptime.org/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        final DbSelect service = retrofit.create(DbSelect.class);
+        final DbInterface service = retrofit.create(DbInterface.class);
         service.SelectServer().enqueue(this);
     }
 

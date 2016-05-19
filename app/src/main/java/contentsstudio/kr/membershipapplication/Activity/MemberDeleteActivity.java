@@ -15,7 +15,6 @@ import android.widget.Toast;
 import java.util.List;
 
 import contentsstudio.kr.membershipapplication.DBinterface.DbInterface;
-import contentsstudio.kr.membershipapplication.DBinterface.DbSelect;
 import contentsstudio.kr.membershipapplication.DBinterface.Result;
 import contentsstudio.kr.membershipapplication.Models.MemberModel;
 import contentsstudio.kr.membershipapplication.R;
@@ -37,7 +36,7 @@ public class MemberDeleteActivity extends AppCompatActivity implements View.OnCl
     private String string_user_id;
     private String PreferencesString;
     private DbInterface mDbDelete;
-    private DbSelect mDbSelect;
+    private DbInterface mDbSelect;
     private String string_user_del;
 
     @Override
@@ -62,37 +61,6 @@ public class MemberDeleteActivity extends AppCompatActivity implements View.OnCl
         setOutAlertMsg();
 
     }
-
-    // Retrofit delete 방식
-//    public void delete() {
-//        string_user_id = PreferencesString;
-//
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("http://suwonsmartapp.iptime.org/")
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//        mDbDelete = retrofit.create(DbInterface.class);
-//
-//        Call<Result> memberModelCall = mDbDelete.DeleteServer(string_user_id);
-//        memberModelCall.enqueue(new Callback<Result>() {
-//            @Override
-//            public void onResponse(Call<Result> call, Response<Result> response) {
-////                Toast.makeText(MemberUpdateActivity.this, response.body().getResult(), Toast.LENGTH_SHORT).show();
-//                if (response.body().getResult().equals("ok")) {
-//                    Toast.makeText(MemberDeleteActivity.this, "탈퇴가 완료 되었습니다.", Toast.LENGTH_SHORT).show();
-//
-//                } else {
-//                    Toast.makeText(MemberDeleteActivity.this, "정상적으로 탈퇴가 되지 않았습니다.", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Result> call, Throwable t) {
-//                Toast.makeText(MemberDeleteActivity.this, "통신 에러", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//    }
 
     // Retrofit delete Y / N 방식
     public void delete() {
@@ -134,7 +102,7 @@ public class MemberDeleteActivity extends AppCompatActivity implements View.OnCl
                 .baseUrl("http://suwonsmartapp.iptime.org/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        mDbSelect = retrofit.create(DbSelect.class);
+        mDbSelect = retrofit.create(DbInterface.class);
 
         Call<List<MemberModel>> call = mDbSelect.selectServer(PreferencesString);
         call.enqueue(new Callback<List<MemberModel>>() {

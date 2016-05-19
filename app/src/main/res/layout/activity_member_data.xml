@@ -22,11 +22,11 @@
             android:layout_weight="1"
             android:hint="ID를 입력하세요." />
 
-        <!--<Button-->
-            <!--android:id="@+id/user_idchk"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="중복확인" />-->
+        <Button
+            android:id="@+id/user_idchk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="중복확인" />
     </LinearLayout>
 
     <EditText
