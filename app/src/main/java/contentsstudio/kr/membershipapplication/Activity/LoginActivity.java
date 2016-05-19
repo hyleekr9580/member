@@ -16,11 +16,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
 import contentsstudio.kr.membershipapplication.BroaddCast.BroadcastActivity;
-import contentsstudio.kr.membershipapplication.DBinterface.DbSelect;
 import contentsstudio.kr.membershipapplication.DBinterface.DbWhere;
 import contentsstudio.kr.membershipapplication.DBinterface.Result;
 import contentsstudio.kr.membershipapplication.R;
+import contentsstudio.kr.membershipapplication.Util.AES256Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,13 +50,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private String string_user_pw;
     private String PreferencesString;
     private String string_user_del;
-    private DbSelect mDbSelect;
+    private AES256Util mAes256;
+    private String mEecText;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_main);
+
+        String key = "qwjejwqklejqwlkjdasjkhdio3u1e912eq0df0ascjqw30d30ass";       // key는 16자 이상
+        try {
+            mAes256 = new AES256Util(key);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         mIdEditText = (EditText) findViewById(R.id.login_id_edt);
         mPwEditText = (EditText) findViewById(R.id.login_pw_edt);
@@ -66,7 +83,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // Retrofit
     public void login() {
         string_user_id = mIdEditText.getText().toString();
+        //암호화전 문자
         string_user_pw = mPwEditText.getText().toString();
+        // 암호화 풀기 (복호화)
+        try {
+            mEecText = mAes256.aesDecode(string_user_pw);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        }
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://suwonsmartapp.iptime.org/")
@@ -74,7 +111,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .build();
         mDbWhere = retrofit.create(DbWhere.class);
 
-        Call<Result> memberModelCall = mDbWhere.WhereServer(string_user_id, string_user_pw, string_user_del);
+        Call<Result> memberModelCall = mDbWhere.WhereServer(string_user_id, mEecText, string_user_del);
         memberModelCall.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {

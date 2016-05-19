@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -26,13 +25,22 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
 import contentsstudio.kr.membershipapplication.DBinterface.DbInsert;
 import contentsstudio.kr.membershipapplication.DBinterface.Result;
 import contentsstudio.kr.membershipapplication.R;
+import contentsstudio.kr.membershipapplication.Util.AES256Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,17 +69,24 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
     private CheckBox mCheckBox02;
     //    Toast 객체 선언
     private Toast mToast;
-    private Button mButtonChk;
     private TextView mTextChk01;
     private TextView mTextChk02;
-    private WebView mWebView;
     private Intent mIntent;
+    private AES256Util mAes256;
+    private String mEncText;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_data);
+
+        String key = "qwjejwqklejqwlkjdasjkhdio3u1e912eq0df0ascjqw30d30ass";       // key는 16자 이상
+        try {
+            mAes256 = new AES256Util(key);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         // onCreate() 에서 Toast.makeText()를 이용하여 Toast 객체 초기화
         mToast = Toast.makeText(this, "null", Toast.LENGTH_SHORT);
@@ -143,7 +158,27 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
         String id = mEditId.getText().toString();
         String name = mEditName.getText().toString();
         String email = mEditEmail.getText().toString();
+        // 암호화할 문자
         String pw = mEditPw01.getText().toString();
+        // 암호화된 문자
+        try {
+            mEncText = mAes256.aesEncode(pw);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        }
+
 
         switch (v.getId()) {
             //  이용약관 확인
@@ -165,14 +200,17 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
                 if (chkUserData()) {
 
                     //서버에 전송
-                    Call<Result> call = mDbInsert.InsertServer(id, pw, name, mPhone, mTelecom,
+                    Call<Result> call = mDbInsert.InsertServer(id, mEncText, name, mPhone, mTelecom,
                             Build.MODEL, Build.VERSION.RELEASE, mAccount, email, google_id, mDate);
 
                     call.enqueue(new Callback<Result>() {
                         @Override
                         public void onResponse(Call<Result> call, Response<Result> response) {
 //                            Toast.makeText(MemberInsertActivity.this, response.body().getResult(), Toast.LENGTH_SHORT).show();
-                            Toast.makeText(MemberInsertActivity.this, "정상적으로 저장이 되었습니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MemberInsertActivity.this, "회원 가입이 완료 되었습니다. \n 로그인 하여 주시기 바랍니다. 감사합니다.", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(MemberInsertActivity.this, LoginActivity.class);
+                            startActivity(intent);
                         }
 
                         @Override
@@ -259,6 +297,7 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
         }
         return true;
     }
+
 
     //  이메일 형식 체크하기
     private boolean checkEmail(String email) {
