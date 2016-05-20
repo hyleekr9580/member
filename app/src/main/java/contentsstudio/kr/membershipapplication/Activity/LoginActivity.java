@@ -77,7 +77,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mPwChkButton.setOnClickListener(this);
 
 
-
         mAdmin = (Button) findViewById(R.id.admin);
         mAdmin.setOnClickListener(this);
 
@@ -163,8 +162,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         setAlertMsg("ID를 입력하세요.");
                     } else if (TextUtils.isEmpty(mPwEditText.getText())) {
                         setAlertMsg("PW를 입력하세요.");
+                    } else if (mPwEditText.getText().length() < 8) {
+                        Toast.makeText(LoginActivity.this, "비밀번호는 8자 이상 입니다.", Toast.LENGTH_SHORT).show();
+                    } else if (mPwEditText.getText().length() > 16) {
+                        Toast.makeText(LoginActivity.this, "비밀번호는 16자 이하 입니다.", Toast.LENGTH_SHORT).show();
                     } else {
                         login();
+
                     }
                 }
                 break;

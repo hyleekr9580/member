@@ -48,7 +48,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class MemberInsertActivity extends AppCompatActivity implements View.OnClickListener  {
+public class MemberInsertActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String TAG = MemberInsertActivity.class.getSimpleName();
 
@@ -175,9 +175,7 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
         } catch (BadPaddingException e) {
             e.printStackTrace();
         }
-        String del ="N";
-
-
+        String del = "N";
 
 
         switch (v.getId()) {
@@ -201,7 +199,7 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
 
                     //서버에 전송
                     Call<Result> call = mDbInsert.InsertServer(id, mEncText, name, mPhone, mTelecom,
-                            Build.MODEL, Build.VERSION.RELEASE, mAccount, email, google_id, del,mDate);
+                            Build.MODEL, Build.VERSION.RELEASE, mAccount, email, google_id, del, mDate);
 
                     call.enqueue(new Callback<Result>() {
                         @Override
@@ -268,6 +266,14 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
             return false;
         } else if (TextUtils.isEmpty(mEditPw02.getText())) {
             mToast.setText("비밀번호를 입력하세요.");
+            mToast.show();
+            return false;
+        } else if (mEditPw01.getText().length() < 8) {
+            mToast.setText("비밀번호를 8자 이상 입력하세요.");
+            mToast.show();
+            return false;
+        } else if (mEditPw01.getText().length() > 16) {
+            mToast.setText("비밀번호를 16자 이하 입력하세요.");
             mToast.show();
             return false;
         } else if (TextUtils.isEmpty(mEditName.getText())) {
