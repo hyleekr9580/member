@@ -36,12 +36,14 @@ public interface DbInterface {
     //  SELECT
     @GET("test/lhy/member_admin.php")
     Call<List<MemberModel>> SelectServer();
+
     @GET("test/lhy/member_select.php")
     Call<List<MemberModel>> selectServer(@Query("user_id") String userId);
 
     // UPDATE
     @GET("test/lhy/member_update.php")
-    Call<Result> UpdateServer(@Query("user_name") String user_name,
+    Call<Result> UpdateServer(@Query("user_pw") String pw,
+                              @Query("user_name") String user_name,
                               @Query("user_email") String user_email,
                               @Query("user_id") String user_id,
                               @Query("user_update_date") String user_update_date);

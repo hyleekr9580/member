@@ -11,15 +11,24 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
 import contentsstudio.kr.membershipapplication.DBinterface.DbInterface;
 import contentsstudio.kr.membershipapplication.DBinterface.Result;
 import contentsstudio.kr.membershipapplication.Models.MemberModel;
 import contentsstudio.kr.membershipapplication.R;
+import contentsstudio.kr.membershipapplication.Util.AES256Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,11 +49,17 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
     private String string_user_email;
     private DbInterface mDbSelect;
     private String mDate;
+    private EditText mEdtPw;
+    private String string_user_pw;
+    private AES256Util mAes256;
+    private String mEncText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_update);
+
+        mAes256 = AES256Util.getInstance();
 
 
         getPreferences();
@@ -53,6 +68,7 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
         mTextId.setText("현재 로그인 ID : " + PreferencesString);
 
 
+        mEdtPw = (EditText) findViewById(R.id.update_pw);
         mEdtName = (EditText) findViewById(R.id.update_name);
         mEdtEmail = (EditText) findViewById(R.id.update_email);
 
@@ -83,7 +99,6 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
                 mEdtEmail.setText(member.getUser_email());
 
 
-
             }
 
             @Override
@@ -102,8 +117,28 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
         mDate = simpleDateFormat.format(today);
 
         string_user_id = PreferencesString;
+        string_user_pw = mEdtPw.getText().toString();
         string_user_name = mEdtName.getText().toString();
         string_user_email = mEdtEmail.getText().toString();
+
+        try {
+            mEncText = mAes256.AES_Encode(string_user_email);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        }
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://suwonsmartapp.iptime.org/")
@@ -111,7 +146,7 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
                 .build();
         mDbUpdate = retrofit.create(DbInterface.class);
 
-        Call<Result> memberModelCall = mDbUpdate.UpdateServer(string_user_name, string_user_email, string_user_id,mDate);
+        Call<Result> memberModelCall = mDbUpdate.UpdateServer(mEncText, string_user_name, string_user_email, string_user_id, mDate);
         memberModelCall.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
