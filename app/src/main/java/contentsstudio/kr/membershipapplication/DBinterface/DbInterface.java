@@ -31,7 +31,9 @@ public interface DbInterface {
     //http://clubcoffee.cafe24.co   m/home/SampleJoa_Test/member_insert.php
     @GET("test/lhy/member_delete.php")
     Call<Result> DeleteServer(@Query("user_id") String user_id,
-                              @Query("user_del") String user_del);
+                              @Query("user_del") String user_del,
+                              @Query("user_del_text") String user_del_text,
+                              @Query("user_del_date") String user_del_date);
 
     //  SELECT
     @GET("test/lhy/member_admin.php")

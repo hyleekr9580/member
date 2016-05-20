@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import contentsstudio.kr.membershipapplication.DBinterface.DbInterface;
@@ -38,6 +40,9 @@ public class MemberDeleteActivity extends AppCompatActivity implements View.OnCl
     private DbInterface mDbDelete;
     private DbInterface mDbSelect;
     private String string_user_del;
+    private String string_user_del_text;
+    private String string_user_del_date;
+    private String mDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +63,33 @@ public class MemberDeleteActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        setOutAlertMsg();
+
+        switch (v.getId()) {
+            case R.id.del_btn:
+
+                if (TextUtils.isEmpty(mDelEdt.getText().toString())) {
+                    Toast.makeText(MemberDeleteActivity.this, "탈퇴사유를 알려주세요.", Toast.LENGTH_SHORT).show();
+                } else {
+                    setOutAlertMsg();
+
+                }
+
+                break;
+        }
 
     }
 
     // Retrofit delete Y / N 방식
     public void delete() {
+
+        //  update 날짜 확인 (최종 업데이트 일자)
+        long today = System.currentTimeMillis(); // long 형의 현재시간
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        mDate = simpleDateFormat.format(today);
+
         string_user_id = PreferencesString;
         string_user_del = "Y";
+        string_user_del_text = mDelEdt.getText().toString();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://suwonsmartapp.iptime.org/")
@@ -73,7 +97,7 @@ public class MemberDeleteActivity extends AppCompatActivity implements View.OnCl
                 .build();
         mDbDelete = retrofit.create(DbInterface.class);
 
-        Call<Result> memberModelCall = mDbDelete.DeleteServer(string_user_id,string_user_del);
+        Call<Result> memberModelCall = mDbDelete.DeleteServer(string_user_id, string_user_del, string_user_del_text, mDate);
         memberModelCall.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
@@ -93,7 +117,6 @@ public class MemberDeleteActivity extends AppCompatActivity implements View.OnCl
         });
 
     }
-
 
 
     //  Retrofit select
