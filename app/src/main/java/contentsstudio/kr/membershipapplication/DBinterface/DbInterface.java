@@ -34,9 +34,9 @@ public interface DbInterface {
                               @Query("user_del") String user_del);
 
     //  SELECT
-    @GET("test/lhy/member_select.php")
+    @GET("test/lhy/member_admin.php")
     Call<List<MemberModel>> SelectServer();
-    @GET("test/lhy/member_select2.php")
+    @GET("test/lhy/member_select.php")
     Call<List<MemberModel>> selectServer(@Query("user_id") String userId);
 
     // UPDATE

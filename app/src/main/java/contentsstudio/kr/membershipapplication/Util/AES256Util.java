@@ -2,16 +2,15 @@ package contentsstudio.kr.membershipapplication.Util;
 
 import org.apache.commons.codec.binary.Base64;
 
-import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -19,42 +18,46 @@ import javax.crypto.spec.SecretKeySpec;
  * Created by hoyoung on 2016-05-19.
  */
 public class AES256Util {
-    private String iv;
-    private Key keySpec;
+    private static volatile AES256Util INSTANCE;
 
-    public AES256Util(String key) throws UnsupportedEncodingException {
-        this.iv = key.substring(0, 16);
+    final static String secretKey = "12345678901234567890123456789012"; //32bit
+    static String IV = ""; //16bit
 
-        byte[] keyBytes = new byte[16];
-        byte[] b = key.getBytes("UTF-8");
-        int len = b.length;
-        if (len > keyBytes.length)
-            len = keyBytes.length;
-        System.arraycopy(b, 0, keyBytes, 0, len);
-        SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
-
-        this.keySpec = keySpec;
+    public static AES256Util getInstance() {
+        if (INSTANCE == null) {
+            synchronized (AES256Util.class) {
+                if (INSTANCE == null)
+                    INSTANCE = new AES256Util();
+            }
+        }
+        return INSTANCE;
     }
 
-    // 암호화
-    public String aesEncode(String str) throws java.io.UnsupportedEncodingException, NoSuchAlgorithmException,
-            NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException,
-            IllegalBlockSizeException, BadPaddingException {
+    private AES256Util() {
+        IV = secretKey.substring(0, 16);
+    }
+
+    //암호화
+    public static String AES_Encode(String str) throws java.io.UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+        byte[] keyData = secretKey.getBytes();
+
+        SecretKey secureKey = new SecretKeySpec(keyData, "AES");
+
         Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        c.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes()));
+        c.init(Cipher.ENCRYPT_MODE, secureKey, new IvParameterSpec(IV.getBytes()));
 
         byte[] encrypted = c.doFinal(str.getBytes("UTF-8"));
-        String enStr = new String(org.apache.commons.codec.binary.Base64.encodeBase64(encrypted));
+        String enStr = new String(Base64.encodeBase64(encrypted));
 
         return enStr;
     }
 
     //복호화
-    public String aesDecode(String str) throws java.io.UnsupportedEncodingException, NoSuchAlgorithmException,
-            NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException,
-            IllegalBlockSizeException, BadPaddingException {
+    public static String AES_Decode(String str) throws java.io.UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+        byte[] keyData = secretKey.getBytes();
+        SecretKey secureKey = new SecretKeySpec(keyData, "AES");
         Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        c.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes("UTF-8")));
+        c.init(Cipher.DECRYPT_MODE, secureKey, new IvParameterSpec(IV.getBytes("UTF-8")));
 
         byte[] byteStr = Base64.decodeBase64(str.getBytes());
 

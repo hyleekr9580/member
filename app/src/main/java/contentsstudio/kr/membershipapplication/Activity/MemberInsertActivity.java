@@ -82,12 +82,8 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_data);
 
-    String key = "aes256-test-key!!";       // key는 16자 이상
-        try {
-            mAes256 = new AES256Util(key);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        mAes256 = AES256Util.getInstance();
+
 
         // onCreate() 에서 Toast.makeText()를 이용하여 Toast 객체 초기화
         mToast = Toast.makeText(this, "null", Toast.LENGTH_SHORT);
@@ -161,9 +157,9 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
         String email = mEditEmail.getText().toString();
         // 암호화할 문자
         String pw = mEditPw01.getText().toString();
-        // 암호화된 문자
+
         try {
-            mEncText = mAes256.aesEncode(pw);
+            mEncText = mAes256.AES_Encode(pw);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
@@ -201,7 +197,7 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
                 if (chkUserData()) {
 
                     //서버에 전송
-                    Call<Result> call = mDbInsert.InsertServer(id, mEncText, name, mPhone, mTelecom,
+                    Call<Result> call = mDbInsert.InsertServer(id, pw, name, mPhone, mTelecom,
                             Build.MODEL, Build.VERSION.RELEASE, mAccount, email, google_id, mDate);
 
                     call.enqueue(new Callback<Result>() {
