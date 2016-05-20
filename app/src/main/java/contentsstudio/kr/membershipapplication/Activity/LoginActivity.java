@@ -16,6 +16,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
 import contentsstudio.kr.membershipapplication.BroaddCast.BroadcastActivity;
 import contentsstudio.kr.membershipapplication.DBinterface.DbInterface;
 import contentsstudio.kr.membershipapplication.DBinterface.Result;
@@ -52,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_main);
 
-//        mAes256 = AES256Util.getInstance();
+        mAes256 = AES256Util.getInstance();
 
         mIdEditText = (EditText) findViewById(R.id.login_id_edt);
         mPwEditText = (EditText) findViewById(R.id.login_pw_edt);
@@ -71,26 +80,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // Retrofit
     public void login() {
         string_user_id = mIdEditText.getText().toString();
-        //암호화전 문자
         string_user_pw = mPwEditText.getText().toString();
 
-//        try {
-//            mDecText = mAes256.AES_Decode(string_user_pw);
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        } catch (NoSuchPaddingException e) {
-//            e.printStackTrace();
-//        } catch (InvalidKeyException e) {
-//            e.printStackTrace();
-//        } catch (InvalidAlgorithmParameterException e) {
-//            e.printStackTrace();
-//        } catch (IllegalBlockSizeException e) {
-//            e.printStackTrace();
-//        } catch (BadPaddingException e) {
-//            e.printStackTrace();
-//        }
+        // AES_Encode 를 사용하여 비교
+        try {
+            mDecText = mAes256.AES_Encode(string_user_pw);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        }
 
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -99,7 +108,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .build();
         mDbWhere = retrofit.create(DbInterface.class);
 
-        Call<Result> memberModelCall = mDbWhere.WhereServer(string_user_id, string_user_pw, string_user_del);
+        Call<Result> memberModelCall = mDbWhere.WhereServer(string_user_id, mDecText, string_user_del);
         memberModelCall.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
