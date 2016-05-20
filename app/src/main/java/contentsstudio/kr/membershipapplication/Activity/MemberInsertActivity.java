@@ -175,6 +175,9 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
         } catch (BadPaddingException e) {
             e.printStackTrace();
         }
+        String del ="N";
+
+
 
 
         switch (v.getId()) {
@@ -198,7 +201,7 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
 
                     //서버에 전송
                     Call<Result> call = mDbInsert.InsertServer(id, mEncText, name, mPhone, mTelecom,
-                            Build.MODEL, Build.VERSION.RELEASE, mAccount, email, google_id, mDate);
+                            Build.MODEL, Build.VERSION.RELEASE, mAccount, email, google_id, del,mDate);
 
                     call.enqueue(new Callback<Result>() {
                         @Override

@@ -25,6 +25,7 @@ public interface DbInterface {
             , @Query("user_account") String user_account
             , @Query("user_email") String user_email
             , @Query("user_adid") String user_adid
+            , @Query("user_del") String user_del
             , @Query("user_date") String user_date);
 
     //  DELETE
