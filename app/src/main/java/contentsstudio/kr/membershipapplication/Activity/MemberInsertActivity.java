@@ -48,7 +48,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class MemberInsertActivity extends AppCompatActivity implements View.OnClickListener {
+public class MemberInsertActivity extends AppCompatActivity implements View.OnClickListener  {
 
     private String TAG = MemberInsertActivity.class.getSimpleName();
 
@@ -82,7 +82,7 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_data);
 
-        String key = "qwjejwqklejqwlkjdasjkhdio3u1e912eq0df0ascjqw30d30ass";       // key는 16자 이상
+    String key = "aes256-test-key!!";       // key는 16자 이상
         try {
             mAes256 = new AES256Util(key);
         } catch (UnsupportedEncodingException e) {
