@@ -14,29 +14,34 @@
         android:id="@+id/login_id_edt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="아이디를 입력 하세요." />
+        android:hint="아이디를 입력 하세요."
+        android:singleLine="true" />
 
     <EditText
         android:id="@+id/login_pw_edt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="비밀번호를 입력 하세요." />
+        android:hint="비밀번호를 입력 하세요."
+        android:inputType="textPassword"
+        android:singleLine="true" />
 
     <Button
         android:id="@+id/login_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="로그인 버튼" />
+
     <Button
         android:id="@+id/login_new"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="회원가입"/>
+        android:text="회원가입" />
+
     <Button
         android:id="@+id/admin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ADMIN 데이터 확인"/>
+        android:text="ADMIN 데이터 확인" />
 
 
 </LinearLayout>
