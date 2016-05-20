@@ -38,6 +38,18 @@
         android:text="회원가입" />
 
     <Button
+        android:id="@+id/login_chk_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="아이디 찾기" />
+
+    <Button
+        android:id="@+id/login_chk_pw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="비밀번호 찾기" />
+
+    <Button
         android:id="@+id/admin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

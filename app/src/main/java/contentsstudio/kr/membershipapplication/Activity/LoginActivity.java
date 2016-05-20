@@ -52,8 +52,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private String string_user_del;
     private AES256Util mAes256;
     private String mDecText;
-    private DbInterface mDbSelect;
-    private String mPw;
+    private Button mIdChkButton;
+    private Button mPwChkButton;
 
 
     @Override
@@ -71,6 +71,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mLoginButton.setOnClickListener(this);
         mNewButton = (Button) findViewById(R.id.login_new);
         mNewButton.setOnClickListener(this);
+        mIdChkButton = (Button) findViewById(R.id.login_chk_id);
+        mIdChkButton.setOnClickListener(this);
+        mPwChkButton = (Button) findViewById(R.id.login_chk_pw);
+        mPwChkButton.setOnClickListener(this);
+
+
+
         mAdmin = (Button) findViewById(R.id.admin);
         mAdmin.setOnClickListener(this);
 
@@ -173,6 +180,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     startActivity(intent);
                 }
                 break;
+
+            case R.id.login_chk_id:
+                Intent ChkId = new Intent(LoginActivity.this, ChkIdActivity.class);
+                startActivity(ChkId);
+                break;
+
+            case R.id.login_chk_pw:
+                Intent ChkPw = new Intent(LoginActivity.this, ChkPwActivity.class);
+                startActivity(ChkPw);
+                break;
+
 
             case R.id.admin:
                 Intent intent = new Intent(LoginActivity.this, AdminActivity.class);

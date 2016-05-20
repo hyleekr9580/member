@@ -41,7 +41,6 @@ public class MemberDeleteActivity extends AppCompatActivity implements View.OnCl
     private DbInterface mDbSelect;
     private String string_user_del;
     private String string_user_del_text;
-    private String string_user_del_date;
     private String mDate;
 
     @Override

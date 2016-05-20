@@ -26,7 +26,9 @@
         <activity android:name=".Activity.AdminActivity" />
         <activity android:name=".Activity.MemberUpdateActivity" />
         <activity android:name=".BroaddCast.BroadcastActivity" />
-        <activity android:name=".Activity.MemberDeleteActivity"></activity>
+        <activity android:name=".Activity.MemberDeleteActivity" />
+        <activity android:name=".Activity.ChkIdActivity" />
+        <activity android:name=".Activity.ChkPwActivity"></activity>
     </application>
 
 </manifest>
