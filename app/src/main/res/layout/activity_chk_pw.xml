@@ -16,4 +16,22 @@
         android:gravity="center"
         android:text="비밀번호 찾기 화면 입니다."
         android:textSize="20dp" />
+    <EditText
+        android:id="@+id/chkpw_id_edt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="아이디를 입력하세요" />
+
+    <Button
+        android:id="@+id/chkpw_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="찾기" />
+
+    <TextView
+        android:id="@+id/chkpw_name_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="고객님의 ID : " />
+
 </LinearLayout>

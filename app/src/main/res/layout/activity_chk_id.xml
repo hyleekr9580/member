@@ -16,4 +16,22 @@
         android:gravity="center"
         android:text="아이디찾기 화면 입니다."
         android:textSize="20dp" />
+
+    <EditText
+        android:id="@+id/chkid_name_edt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="이름을 입력하세요" />
+
+    <Button
+        android:id="@+id/chkid_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="찾기" />
+
+    <TextView
+        android:id="@+id/chkid_name_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="고객님의 ID : " />
 </LinearLayout>
