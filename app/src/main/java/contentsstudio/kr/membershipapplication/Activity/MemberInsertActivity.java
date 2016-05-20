@@ -197,7 +197,7 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
                 if (chkUserData()) {
 
                     //서버에 전송
-                    Call<Result> call = mDbInsert.InsertServer(id, pw, name, mPhone, mTelecom,
+                    Call<Result> call = mDbInsert.InsertServer(id, mEncText, name, mPhone, mTelecom,
                             Build.MODEL, Build.VERSION.RELEASE, mAccount, email, google_id, mDate);
 
                     call.enqueue(new Callback<Result>() {
