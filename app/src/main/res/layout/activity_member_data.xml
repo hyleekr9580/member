@@ -20,7 +20,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="ID를 입력하세요." />
+            android:hint="ID를 입력하세요."
+            android:singleLine="true" />
 
         <Button
             android:id="@+id/user_idchk"
@@ -34,27 +35,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="비밀번호를 입력하세요."
-        android:inputType="textWebPassword" />
+        android:inputType="textWebPassword"
+        android:singleLine="true" />
 
     <EditText
         android:id="@+id/user_pw02"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="비밀번호를 다시 입력하세요."
-        android:inputType="textWebPassword" />
+        android:inputType="textWebPassword"
+        android:singleLine="true" />
 
     <EditText
         android:id="@+id/user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="이름을 입력하세요." />
+        android:hint="이름을 입력하세요."
+        android:singleLine="true" />
 
     <EditText
         android:id="@+id/user_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="이메일을 입력하세요."
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:singleLine="true" />
 
     <Button
         android:id="@+id/member_btn"
@@ -76,11 +81,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="회원이용약관에 동의합니다.  " />
+
         <TextView
             android:id="@+id/chk01_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="[확인]"/>
+            android:text="[확인]" />
     </LinearLayout>
 
     <LinearLayout
@@ -98,11 +104,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="개인정보 취급방침에 동의합니다.  " />
+
         <TextView
             android:id="@+id/chk02_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="[확인]"/>
+            android:text="[확인]" />
     </LinearLayout>
 
 </LinearLayout>
