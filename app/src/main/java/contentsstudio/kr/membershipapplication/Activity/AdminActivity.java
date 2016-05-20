@@ -40,7 +40,7 @@ public class AdminActivity extends AppCompatActivity implements Callback<List<Me
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         final DbInterface service = retrofit.create(DbInterface.class);
-        service.SelectServer().enqueue(this);
+        service.AdminSelect().enqueue(this);
     }
 
     @Override

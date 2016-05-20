@@ -80,6 +80,7 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
 
     //  Retrofit select
     public void select() {
+        String s = null;
 
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -88,7 +89,7 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
                 .build();
         mDbSelect = retrofit.create(DbInterface.class);
 
-        Call<List<MemberModel>> call = mDbSelect.selectServer(PreferencesString);
+        Call<List<MemberModel>> call = mDbSelect.SelectServer(PreferencesString,s);
         call.enqueue(new Callback<List<MemberModel>>() {
             @Override
             public void onResponse(Call<List<MemberModel>> call, Response<List<MemberModel>> response) {
