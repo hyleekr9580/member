@@ -122,7 +122,7 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
         string_user_email = mEdtEmail.getText().toString();
 
         try {
-            mEncText = mAes256.AES_Encode(string_user_email);
+            mEncText = mAes256.AES_Encode(string_user_pw);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
@@ -171,7 +171,11 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.update_btn:
-                if (TextUtils.isEmpty(mEdtName.getText())) {
+
+
+                if (TextUtils.isEmpty(mEdtPw.getText().toString())) {
+                    Toast.makeText(MemberUpdateActivity.this, "변경 비밀번호 입력", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(mEdtName.getText())) {
                     Toast.makeText(MemberUpdateActivity.this, "수정할 이름을 입력하세요.", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(mEdtEmail.getText())) {
                     Toast.makeText(MemberUpdateActivity.this, "수정할 이메일을 입력하세요.", Toast.LENGTH_SHORT).show();
