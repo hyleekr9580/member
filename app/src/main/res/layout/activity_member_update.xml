@@ -32,7 +32,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="9"
-            android:hint="비밀번호를 입력하세요." />
+            android:hint="비밀번호를 입력하세요."
+            android:singleLine="true" />
     </LinearLayout>
 
     <LinearLayout
@@ -52,7 +53,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="9"
-            android:hint="이름을 입력하세요." />
+            android:hint="이름을 입력하세요."
+            android:singleLine="true" />
     </LinearLayout>
 
     <LinearLayout
@@ -73,7 +75,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="9"
             android:hint="이메일을 입력하세요."
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:singleLine="true" />
     </LinearLayout>
 
     <Button
