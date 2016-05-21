@@ -27,4 +27,7 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.1'
     compile 'com.google.android.gms:play-services:8.4.0'
     compile files('libs/commons-codec-1.10.jar')
+    compile files('libs/activation.jar')
+    compile files('libs/additionnal.jar')
+    compile files('libs/mail.jar')
 }

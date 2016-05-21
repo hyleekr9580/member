@@ -2,6 +2,7 @@ package contentsstudio.kr.membershipapplication.Activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,11 +41,17 @@ public class ChkPwActivity extends AppCompatActivity implements View.OnClickList
     private String string_chk_id;
     private AES256Util mA256;
     private String mStringA256;
+    private MemberModel mMember;
+    private Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chk_pw);
+
+        // onCreate() 에서 Toast.makeText()를 이용하여 Toast 객체 초기화
+        mToast = Toast.makeText(this, "null", Toast.LENGTH_SHORT);
+
 
         mA256 = AES256Util.getInstance();
 
@@ -75,28 +82,35 @@ public class ChkPwActivity extends AppCompatActivity implements View.OnClickList
         call.enqueue(new Callback<List<MemberModel>>() {
             @Override
             public void onResponse(Call<List<MemberModel>> call, Response<List<MemberModel>> response) {
-                MemberModel member = response.body().get(0);
+                //  이름이 있는지 없는지 null을 체크 합니다.
 
-                try {
-                    mStringA256 = mA256.AES_Decode(member.getUser_pw());
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (NoSuchPaddingException e) {
-                    e.printStackTrace();
-                } catch (InvalidKeyException e) {
-                    e.printStackTrace();
-                } catch (InvalidAlgorithmParameterException e) {
-                    e.printStackTrace();
-                } catch (IllegalBlockSizeException e) {
-                    e.printStackTrace();
-                } catch (BadPaddingException e) {
-                    e.printStackTrace();
+                List<MemberModel> memberModelList = response.body();
+
+                if (memberModelList != null && response.body().size() != 0) {
+
+                    mMember = response.body().get(0);
+                    try {
+                        mStringA256 = mA256.AES_Decode(mMember.getUser_pw());
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    } catch (NoSuchPaddingException e) {
+                        e.printStackTrace();
+                    } catch (InvalidKeyException e) {
+                        e.printStackTrace();
+                    } catch (InvalidAlgorithmParameterException e) {
+                        e.printStackTrace();
+                    } catch (IllegalBlockSizeException e) {
+                        e.printStackTrace();
+                    } catch (BadPaddingException e) {
+                        e.printStackTrace();
+                    }
+                    mTextChkPw.setText("비밀번호 : " + mStringA256);
+                } else {
+                    Toast.makeText(ChkPwActivity.this, "찾으시는 정보가 없습니다.", Toast.LENGTH_SHORT).show();
+
                 }
-
-                mTextChkPw.setText("비밀번호 : " + mStringA256);
-
 
             }
 
@@ -107,5 +121,18 @@ public class ChkPwActivity extends AppCompatActivity implements View.OnClickList
             }
         });
     }
+
+
+    private boolean chkUserData() {
+
+        if (TextUtils.isEmpty(mEdtChkId.getText())) {
+            mToast.setText("ID를 입력하세요.");
+            mToast.show();
+            return false;
+        }
+        return true;
+
+    }
+
 
 }

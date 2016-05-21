@@ -1,7 +1,9 @@
 package contentsstudio.kr.membershipapplication.Activity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import contentsstudio.kr.membershipapplication.DBinterface.DbInterface;
+import contentsstudio.kr.membershipapplication.Mail.GMailSender;
 import contentsstudio.kr.membershipapplication.Models.MemberModel;
 import contentsstudio.kr.membershipapplication.R;
 import retrofit2.Call;
@@ -24,27 +27,53 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
 
     private String TAG = ChkPwActivity.class.getSimpleName();
 
+    private ProgressDialog dialog;
+    private GMailSender sender;
     private EditText mEdtChkName;
     private TextView mTextChkId;
     private Button mBtnChkPw;
     private DbInterface mDbSelect;
     private String string_chk_name;
+    private MemberModel mMember;
+    private Toast mToast;
+    private Button mBtnChkPwEmail;
+    private GMailSender mSender;
+    private EditText mEdtChkEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chk_id);
 
+        // onCreate() 에서 Toast.makeText()를 이용하여 Toast 객체 초기화
+        mToast = Toast.makeText(this, "null", Toast.LENGTH_SHORT);
 
         mEdtChkName = (EditText) findViewById(R.id.chkid_name_edt);
+        mEdtChkEmail = (EditText) findViewById(R.id.chkid_email);
+
         mTextChkId = (TextView) findViewById(R.id.chkid_name_text);
         mBtnChkPw = (Button) findViewById(R.id.chkid_btn);
         mBtnChkPw.setOnClickListener(this);
+        mBtnChkPwEmail = (Button) findViewById(R.id.chkid_btn_email);
+        mBtnChkPwEmail.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        select();
+        switch (v.getId()) {
+            case R.id.chkid_btn:
+
+                if (chkUserData()) {
+                    select();
+                }
+                break;
+
+            case R.id.chkid_btn_email:
+                // SUBSTITUTE HERE
+                mSender = new GMailSender("hyleekr9580@gmail.com", "athdtnjfbarwjubv");
+                timeThread();
+                break;
+        }
     }
 
     //  Retrofit select
@@ -62,13 +91,21 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
         call.enqueue(new Callback<List<MemberModel>>() {
             @Override
             public void onResponse(Call<List<MemberModel>> call, Response<List<MemberModel>> response) {
-
-                MemberModel member = response.body().get(0);
-
-                Log.e(TAG, "onResponse: " + member.getUser_id());
+                //  이름이 있는지 없는지 null을 체크 합니다.
 
 
-                mTextChkId.setText("고객님 ID : " + member.getUser_id());
+                List<MemberModel> memberModelList = response.body();
+
+                if (memberModelList != null && memberModelList.size() != 0) {
+                    mMember = memberModelList.get(0);
+                    Log.e(TAG, "onResponse: " + response.body().get(0));
+                    Log.e(TAG, "onResponse: " + mMember.getUser_id());
+                    mTextChkId.setText("비밀번호 : " + mMember.getUser_id());
+
+                } else {
+                    Toast.makeText(ChkIdActivity.this, "찾으시는 정보가 없습니다.", Toast.LENGTH_SHORT).show();
+
+                }
 
             }
 
@@ -79,4 +116,55 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
             }
         });
     }
+
+    private boolean chkUserData() {
+
+        if (TextUtils.isEmpty(mEdtChkName.getText())) {
+            mToast.setText("이름을 입력하세요.");
+            mToast.show();
+            return false;
+        }
+        return true;
+
+    }
+
+    public void timeThread() {
+
+        dialog = new ProgressDialog(this);
+        dialog = new ProgressDialog(this);
+        dialog.setTitle("Wait...");
+        dialog.setMessage("의견을 보내는 중입니다.");
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(true);
+        dialog.show();
+        new Thread(new Runnable() {
+
+            public void run() {
+                // TODO Auto-generated method stub
+                try {
+                    mSender.sendMail("고객님의 ID 입니다. ", // subject.getText().toString(), 메일제목
+                            mTextChkId.getText().toString(), // body.getText().toString(), 발송내용
+                            "hyleekr9580@gmail.com", // from.getText().toString(), 보내는사람
+                            mEdtChkEmail.getText().toString() //받는사람
+//                            "hyleekr@nate.com" // to.getText().toString()
+                    );
+                    sleep(3000);
+                } catch (Exception e) {
+                    Log.e("SendMail", e.getMessage(), e);
+                    Toast.makeText(ChkIdActivity.this, "신청 실패", Toast.LENGTH_SHORT)
+                            .show();
+
+
+                }
+                dialog.dismiss();
+            }
+
+            private void sleep(int i) {
+                // TODO Auto-generated method stub
+
+            }
+
+        }).start();
+    }
+
 }
