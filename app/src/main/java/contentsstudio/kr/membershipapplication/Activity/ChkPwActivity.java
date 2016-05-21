@@ -2,7 +2,6 @@ package contentsstudio.kr.membershipapplication.Activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -72,7 +71,7 @@ public class ChkPwActivity extends AppCompatActivity implements View.OnClickList
                 .build();
         mDbSelect = retrofit.create(DbInterface.class);
 
-        Call<List<MemberModel>> call = mDbSelect.SelectServer(string_chk_id,s);
+        Call<List<MemberModel>> call = mDbSelect.SelectServer(string_chk_id, s);
         call.enqueue(new Callback<List<MemberModel>>() {
             @Override
             public void onResponse(Call<List<MemberModel>> call, Response<List<MemberModel>> response) {
@@ -103,8 +102,8 @@ public class ChkPwActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<List<MemberModel>> call, Throwable t) {
-                Toast.makeText(ChkPwActivity.this, "fail", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
+                Toast.makeText(ChkPwActivity.this, "E000 통신 에러가 발생 하였습니다.", Toast.LENGTH_SHORT).show();
+//                Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
             }
         });
     }

@@ -104,8 +104,8 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onFailure(Call<List<MemberModel>> call, Throwable t) {
-                Toast.makeText(MemberUpdateActivity.this, "fail", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
+                Toast.makeText(MemberUpdateActivity.this, "E000 통신 에러가 발생 하였습니다.", Toast.LENGTH_SHORT).show();
+//                Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
             }
         });
     }
@@ -163,7 +163,7 @@ public class MemberUpdateActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onFailure(Call<Result> call, Throwable t) {
-                Toast.makeText(MemberUpdateActivity.this, "통신 에러", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MemberUpdateActivity.this, "E000 통신 에러가 발생 하였습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 

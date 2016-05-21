@@ -14,7 +14,6 @@ import java.util.List;
 import contentsstudio.kr.membershipapplication.DBinterface.DbInterface;
 import contentsstudio.kr.membershipapplication.Models.MemberModel;
 import contentsstudio.kr.membershipapplication.R;
-import contentsstudio.kr.membershipapplication.Util.AES256Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,14 +24,11 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
 
     private String TAG = ChkPwActivity.class.getSimpleName();
 
-    private AES256Util mA256;
     private EditText mEdtChkName;
     private TextView mTextChkId;
     private Button mBtnChkPw;
-    private String string_chk_id;
     private DbInterface mDbSelect;
     private String string_chk_name;
-    private String mStringA256;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,17 +63,19 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onResponse(Call<List<MemberModel>> call, Response<List<MemberModel>> response) {
 
-
                 MemberModel member = response.body().get(0);
-                mTextChkId.setText("고객님 ID : " + member.getUser_id());
 
+                Log.e(TAG, "onResponse: " + member.getUser_id());
+
+
+                mTextChkId.setText("고객님 ID : " + member.getUser_id());
 
             }
 
             @Override
             public void onFailure(Call<List<MemberModel>> call, Throwable t) {
-                Toast.makeText(ChkIdActivity.this, "fail", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
+                Toast.makeText(ChkIdActivity.this, "E000 통신 에러가 발생 하였습니다.", Toast.LENGTH_SHORT).show();
+//                Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
             }
         });
     }

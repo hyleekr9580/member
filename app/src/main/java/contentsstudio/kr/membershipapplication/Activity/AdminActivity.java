@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class AdminActivity extends AppCompatActivity implements Callback<List<Me
     }
     @Override
     public void onFailure(Call<List<MemberModel>> call, Throwable t) {
-
+        Toast.makeText(AdminActivity.this, "통신 에러 발생 하였습니다.", Toast.LENGTH_SHORT).show();
     }
 
     private static class AdminAdapter extends BaseAdapter {

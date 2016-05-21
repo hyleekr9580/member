@@ -103,7 +103,6 @@ public class MemberDeleteActivity extends AppCompatActivity implements View.OnCl
 //                Toast.makeText(MemberUpdateActivity.this, response.body().getResult(), Toast.LENGTH_SHORT).show();
                 if (response.body().getResult().equals("ok")) {
                     Toast.makeText(MemberDeleteActivity.this, "탈퇴가 완료 되었습니다.", Toast.LENGTH_SHORT).show();
-
                 } else {
                     Toast.makeText(MemberDeleteActivity.this, "정상적으로 탈퇴가 되지 않았습니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -111,7 +110,7 @@ public class MemberDeleteActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onFailure(Call<Result> call, Throwable t) {
-                Toast.makeText(MemberDeleteActivity.this, "통신 에러", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MemberDeleteActivity.this, "E000 통신 에러가 발생 하였습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -140,8 +139,8 @@ public class MemberDeleteActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onFailure(Call<List<MemberModel>> call, Throwable t) {
-                Toast.makeText(MemberDeleteActivity.this, "fail", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
+                Toast.makeText(MemberDeleteActivity.this, "E000 통신 에러가 발생 하였습니다.", Toast.LENGTH_SHORT).show();
+//                Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
             }
         });
     }

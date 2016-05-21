@@ -123,10 +123,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (response.body().getResult().equals("ok")) {
 
                     savePreferences();
-                    Log.e(TAG, "savePreferences: 로그인 확인");
-
+//                    Log.e(TAG, "savePreferences: 로그인 확인");
                     getPreferences();
-                    Log.e(TAG, "getPreferences: ID값 확인");
+//                    Log.e(TAG, "getPreferences: ID값 확인");
 
 
                     Toast.makeText(LoginActivity.this, "로그인되었습니다.", Toast.LENGTH_SHORT).show();
@@ -140,7 +139,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<Result> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "통신 에러가 발생 하였습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "E000 통신 에러가 발생 하였습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -156,7 +155,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 //  유심체크를 합니다.
                 if (telephonyManager.getSimState() == TelephonyManager.SIM_STATE_ABSENT) {
                     // 유심이 없는 경우
-                    Toast.makeText(LoginActivity.this, "USIM을 확인 할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "E001 USIM을 확인 할 수 없습니다.", Toast.LENGTH_SHORT).show();
                 } else {
                     if (TextUtils.isEmpty(mIdEditText.getText())) {
                         setAlertMsg("ID를 입력하세요.");
@@ -177,8 +176,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 //  유심체크를 합니다.
                 if (telephonyManager.getSimState() == TelephonyManager.SIM_STATE_ABSENT) {
                     // 유심이 없는 경우
-                    Toast.makeText(LoginActivity.this, "USIM을 확인 할 수 없습니다.", Toast.LENGTH_SHORT).show();
-                } else {
+                    Toast.makeText(LoginActivity.this, "E001 USIM을 확인 할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                } else  {
                     // 유심이 존재하는 경우
                     Intent intent = new Intent(LoginActivity.this, MemberInsertActivity.class);
                     startActivity(intent);

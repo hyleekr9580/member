@@ -213,7 +213,7 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
 
                         @Override
                         public void onFailure(Call<Result> call, Throwable t) {
-                            Toast.makeText(MemberInsertActivity.this, "에러발생", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MemberInsertActivity.this, "E000 통신 에러가 발생 하였습니다.", Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -241,16 +241,26 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
             } catch (GooglePlayServicesRepairableException e) {
                 e.printStackTrace();
             }
-            return adInfo.getId();
-        }
 
+            String adid = null;
+            try {
+                adid = adInfo.getId();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            return adid;
+        }
 
         @UiThread
         @Override
         protected void onPostExecute(String adid) {
+
+            if (adid == null) {
+                //  E002 ADID 확인불가
+                Toast.makeText(MemberInsertActivity.this, "E002 단말정보 확인이 되지 않습니다.", Toast.LENGTH_LONG).show();
+                finish();
+            }
             google_id = adid;
-
-
         }
     }
 
@@ -293,7 +303,7 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
             mToast.show();
             return false;
         } else if (!(mEditPw01.getText().toString().equals(mEditPw02.getText().toString()))) {
-            mToast.setText("입력하신 비빌번호가 다릅니다.\n비밀번호를 확인하세요.");
+            mToast.setText("입력하신 비빌번호가 다릅니다.\n 비밀번호를 확인하세요.");
             mToast.show();
             return false;
         } else if (!checkEmail(mEditEmail.getText().toString())) {
