@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import contentsstudio.kr.membershipapplication.DBinterface.DbInterface;
 import contentsstudio.kr.membershipapplication.Mail.GMailSender;
@@ -31,7 +33,7 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
     private GMailSender sender;
     private EditText mEdtChkName;
     private TextView mTextChkId;
-    private Button mBtnChkPw;
+    private Button mBtnChkId;
     private DbInterface mDbSelect;
     private String string_chk_name;
     private MemberModel mMember;
@@ -52,8 +54,8 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
         mEdtChkEmail = (EditText) findViewById(R.id.chkid_email);
 
         mTextChkId = (TextView) findViewById(R.id.chkid_name_text);
-        mBtnChkPw = (Button) findViewById(R.id.chkid_btn);
-        mBtnChkPw.setOnClickListener(this);
+        mBtnChkId = (Button) findViewById(R.id.chkid_btn);
+        mBtnChkId.setOnClickListener(this);
         mBtnChkPwEmail = (Button) findViewById(R.id.chkid_btn_email);
         mBtnChkPwEmail.setOnClickListener(this);
     }
@@ -69,11 +71,22 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.chkid_btn_email:
-                // SUBSTITUTE HERE
-                mSender = new GMailSender("hyleekr9580@gmail.com", "athdtnjfbarwjubv");
-                timeThread();
-                break;
+
+                if (!(mBtnChkId.isSelected())) {
+                    Toast.makeText(ChkIdActivity.this, "찾기버튼을 먼저 누르세요", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(mEdtChkEmail.getText().toString())) {
+                    Toast.makeText(ChkIdActivity.this, "이메일을 입력하여 주시기 바랍니다.", Toast.LENGTH_SHORT).show();
+                } else if (!checkEmail(mEdtChkEmail.getText().toString())) {
+                    Toast.makeText(ChkIdActivity.this, "정상적인 이메일을 입력하여 주시기 바랍니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // SUBSTITUTE HERE
+                    mSender = new GMailSender("hyleekr9580@gmail.com", "athdtnjfbarwjubv");
+                    timeThread();
+                    break;
+                }
         }
+
+
     }
 
     //  Retrofit select
@@ -151,12 +164,12 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
                     sleep(3000);
                 } catch (Exception e) {
                     Log.e("SendMail", e.getMessage(), e);
-                    Toast.makeText(ChkIdActivity.this, "신청 실패", Toast.LENGTH_SHORT)
-                            .show();
+                    Toast.makeText(ChkIdActivity.this, "신청 실패", Toast.LENGTH_SHORT).show();
 
 
                 }
                 dialog.dismiss();
+
             }
 
             private void sleep(int i) {
@@ -165,6 +178,17 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
             }
 
         }).start();
+        Toast.makeText(ChkIdActivity.this, "이메일 발송이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
+
     }
+
+    //  이메일 형식 체크하기
+    private boolean checkEmail(String email) {
+        String mail = "^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
+        Pattern p = Pattern.compile(mail);
+        Matcher m = p.matcher(email);
+        return m.matches();
+    }
+
 
 }
