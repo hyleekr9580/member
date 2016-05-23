@@ -67,14 +67,14 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
 
                 if (chkUserData()) {
                     select();
+                    mEdtChkEmail.setVisibility(View.VISIBLE);
+                    mBtnChkPwEmail.setVisibility(View.VISIBLE);
                 }
                 break;
 
             case R.id.chkid_btn_email:
 
-                if (!(mBtnChkId.isSelected())) {
-                    Toast.makeText(ChkIdActivity.this, "찾기버튼을 먼저 누르세요", Toast.LENGTH_SHORT).show();
-                } else if (TextUtils.isEmpty(mEdtChkEmail.getText().toString())) {
+                if (TextUtils.isEmpty(mEdtChkEmail.getText().toString())) {
                     Toast.makeText(ChkIdActivity.this, "이메일을 입력하여 주시기 바랍니다.", Toast.LENGTH_SHORT).show();
                 } else if (!checkEmail(mEdtChkEmail.getText().toString())) {
                     Toast.makeText(ChkIdActivity.this, "정상적인 이메일을 입력하여 주시기 바랍니다.", Toast.LENGTH_SHORT).show();
@@ -113,7 +113,9 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
                     mMember = memberModelList.get(0);
                     Log.e(TAG, "onResponse: " + response.body().get(0));
                     Log.e(TAG, "onResponse: " + mMember.getUser_id());
-                    mTextChkId.setText("비밀번호 : " + mMember.getUser_id());
+                    mTextChkId.setText("고객님의 ID : " + mMember.getUser_id());
+
+
 
                 } else {
                     Toast.makeText(ChkIdActivity.this, "찾으시는 정보가 없습니다.", Toast.LENGTH_SHORT).show();
@@ -189,6 +191,7 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
         Matcher m = p.matcher(email);
         return m.matches();
     }
+
 
 
 }
