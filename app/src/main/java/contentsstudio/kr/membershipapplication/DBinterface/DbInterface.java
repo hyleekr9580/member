@@ -44,6 +44,7 @@ public interface DbInterface {
     Call<List<MemberModel>> SelectServer(@Query("user_id") String user_id,
                                          @Query("user_name") String user_name);
 
+
     // UPDATE
     @GET("test/lhy/member_update.php")
     Call<Result> UpdateServer(@Query("user_pw") String user_pw,

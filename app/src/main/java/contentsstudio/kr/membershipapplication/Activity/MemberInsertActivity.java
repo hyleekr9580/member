@@ -3,6 +3,7 @@ package contentsstudio.kr.membershipapplication.Activity;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -10,9 +11,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -30,6 +33,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +43,7 @@ import javax.crypto.NoSuchPaddingException;
 
 import contentsstudio.kr.membershipapplication.DBinterface.DbInterface;
 import contentsstudio.kr.membershipapplication.DBinterface.Result;
+import contentsstudio.kr.membershipapplication.Models.MemberModel;
 import contentsstudio.kr.membershipapplication.R;
 import contentsstudio.kr.membershipapplication.Util.AES256Util;
 import retrofit2.Call;
@@ -75,6 +80,10 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
     private AES256Util mAes256;
     private String mEncText;
     private Button mButtonChk;
+    private String string_chk_id;
+    private DbInterface mDbSelect;
+    private List<MemberModel> mMemberModelList;
+    private MemberModel mMember;
 
 
     @Override
@@ -119,9 +128,74 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
 
     }
 
+    //  Retrofit select
+    public void select() {
+        string_chk_id = mEditId.getText().toString();
+        String s = null;
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://suwonsmartapp.iptime.org/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        mDbSelect = retrofit.create(DbInterface.class);
+
+        Call<List<MemberModel>> call = mDbSelect.SelectServer(string_chk_id, s);
+        call.enqueue(new Callback<List<MemberModel>>() {
+            @Override
+            public void onResponse(Call<List<MemberModel>> call, Response<List<MemberModel>> response) {
+                mMemberModelList = response.body();
+
+                if (mMemberModelList != null && mMemberModelList.size() != 0) {
+                    mMember = mMemberModelList.get(0);
+                    Log.e(TAG, "onResponse: " + response.body().get(0));
+                    Log.e(TAG, "onResponse: " + mMember.getUser_id());
+//                    mTextChkId.setText("고객님의 ID : " + mMember.getUser_id());
+                    Toast.makeText(MemberInsertActivity.this, "중복ID", Toast.LENGTH_SHORT).show();
+//                    setAlertMsg("중복ID 입니다.");
+                } else {
+//                    Toast.makeText(MemberInsertActivity.this, "중복된 ID가 없습니다.", Toast.LENGTH_SHORT).show();
+                    insert();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<MemberModel>> call, Throwable t) {
+                Toast.makeText(MemberInsertActivity.this, "E000 통신 에러가 발생 하였습니다.", Toast.LENGTH_SHORT).show();
+//                Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
+            }
+        });
+    }
 
     @Override
     public void onClick(View v) {
+
+
+        switch (v.getId()) {
+            //  이용약관 확인
+            case R.id.chk01_text:
+                mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.dhcomms.com"));
+                startActivity(mIntent);
+                break;
+            //  개인정보취급방침 확인
+            case R.id.chk02_text:
+                mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.dhcomms.com"));
+                startActivity(mIntent);
+                break;
+            //  아이디체크
+            case R.id.user_idchk:
+                Toast.makeText(MemberInsertActivity.this, "아이디 중복 체크", Toast.LENGTH_SHORT).show();
+                break;
+            //  회원가입 서버 저장
+            case R.id.member_btn:
+                if (chkUserData()) {
+                    select();
+                }
+                break;
+        }
+    }
+
+    private void insert() {
 
         StringBuilder stringBuilder = new StringBuilder("");
 
@@ -177,53 +251,27 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
         }
         String del = "N";
 
+        //서버에 전송
+        Call<Result> call = mDbInsert.InsertServer(id, mEncText, name, mPhone, mTelecom,
+                Build.MODEL, Build.VERSION.RELEASE, mAccount, email, google_id, del, mDate);
 
-        switch (v.getId()) {
-            //  이용약관 확인
-            case R.id.chk01_text:
-                mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.dhcomms.com"));
-                startActivity(mIntent);
-                break;
-            //  개인정보취급방침 확인
-            case R.id.chk02_text:
-                mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.dhcomms.com"));
-                startActivity(mIntent);
-                break;
-            //  아이디체크
-            case R.id.user_idchk:
-                Toast.makeText(MemberInsertActivity.this, "아이디 중복 체크", Toast.LENGTH_SHORT).show();
-                break;
-            //  회원가입 서버 저장
-            case R.id.member_btn:
-                if (chkUserData()) {
-
-                    //서버에 전송
-                    Call<Result> call = mDbInsert.InsertServer(id, mEncText, name, mPhone, mTelecom,
-                            Build.MODEL, Build.VERSION.RELEASE, mAccount, email, google_id, del, mDate);
-
-                    call.enqueue(new Callback<Result>() {
-                        @Override
-                        public void onResponse(Call<Result> call, Response<Result> response) {
+        call.enqueue(new Callback<Result>() {
+            @Override
+            public void onResponse(Call<Result> call, Response<Result> response) {
 //                            Toast.makeText(MemberInsertActivity.this, response.body().getResult(), Toast.LENGTH_SHORT).show();
-                            Toast.makeText(MemberInsertActivity.this, "회원 가입이 완료 되었습니다. \n 로그인 하여 주시기 바랍니다. 감사합니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MemberInsertActivity.this, "회원 가입이 완료 되었습니다. \n 로그인 하여 주시기 바랍니다. 감사합니다.", Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(MemberInsertActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                        }
+                Intent intent = new Intent(MemberInsertActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
 
-                        @Override
-                        public void onFailure(Call<Result> call, Throwable t) {
-                            Toast.makeText(MemberInsertActivity.this, "E000 통신 에러가 발생 하였습니다.", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onFailure(Call<Result> call, Throwable t) {
+                Toast.makeText(MemberInsertActivity.this, "E000 통신 에러가 발생 하였습니다.", Toast.LENGTH_SHORT).show();
 
-                        }
-                    });
-
-                }
-
-                break;
-        }
-
-
+            }
+        });
     }
 
     private class AdidAsyncTask extends AsyncTask<String, Integer, String> {
@@ -265,7 +313,6 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
     }
 
     private boolean chkUserData() {
-
         if (TextUtils.isEmpty(mEditId.getText())) {
             mToast.setText("ID를 입력하세요.");
             mToast.show();
@@ -323,6 +370,21 @@ public class MemberInsertActivity extends AppCompatActivity implements View.OnCl
         return m.matches();
     }
 
+    // 단순 알림창
+    private void setAlertMsg(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);     // 여기서 this는 Activity의 this
+
+        // 여기서 부터는 알림창의 속성 설정
+        builder.setCancelable(false)        // 뒤로 버튼 클릭시 취소 가능 설정
+                .setMessage(message)
+                .setNegativeButton("확인", new DialogInterface.OnClickListener() {
+                    // 취소 버튼 클릭시 설정
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();    // 알림창 띄우기
+    }
 }
 
 
