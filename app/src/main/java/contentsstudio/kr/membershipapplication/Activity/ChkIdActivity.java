@@ -41,6 +41,7 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
     private Button mBtnChkPwEmail;
     private GMailSender mSender;
     private EditText mEdtChkEmail;
+    private List<MemberModel> mMemberModelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +65,8 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.chkid_btn:
-
-                if (chkUserData()) {
-                    select();
+                select();
+                if (chkUserData() && mMemberModelList != null && mMemberModelList.size() != 0) {
                     mEdtChkEmail.setVisibility(View.VISIBLE);
                     mBtnChkPwEmail.setVisibility(View.VISIBLE);
                 }
@@ -107,14 +107,13 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
                 //  이름이 있는지 없는지 null을 체크 합니다.
 
 
-                List<MemberModel> memberModelList = response.body();
+                mMemberModelList = response.body();
 
-                if (memberModelList != null && memberModelList.size() != 0) {
-                    mMember = memberModelList.get(0);
+                if (mMemberModelList != null && mMemberModelList.size() != 0) {
+                    mMember = mMemberModelList.get(0);
                     Log.e(TAG, "onResponse: " + response.body().get(0));
                     Log.e(TAG, "onResponse: " + mMember.getUser_id());
                     mTextChkId.setText("고객님의 ID : " + mMember.getUser_id());
-
 
 
                 } else {
@@ -191,7 +190,6 @@ public class ChkIdActivity extends AppCompatActivity implements View.OnClickList
         Matcher m = p.matcher(email);
         return m.matches();
     }
-
 
 
 }
